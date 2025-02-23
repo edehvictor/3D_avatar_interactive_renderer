@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
+import 'package:mobile_3d_renderer/model_one.dart';
+import 'package:mobile_3d_renderer/model_two.dart';
 
 class ModelRender extends StatefulWidget {
   const ModelRender({super.key, required this.title});
-
   final String title;
 
   @override
@@ -13,9 +14,6 @@ class ModelRender extends StatefulWidget {
 class _ModelRenderState extends State<ModelRender> {
   Flutter3DController controller1 = Flutter3DController();
   Flutter3DController controller2 = Flutter3DController();
-
-  String? chosenAnimation1;
-  String? chosenAnimation2;
   bool changeModel = false;
   String srcGlb1 = 'assets/images/business_man.glb';
   String srcGlb2 = 'assets/images/business_man.glb';
@@ -54,118 +52,12 @@ class _ModelRenderState extends State<ModelRender> {
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    controller1.playAnimation();
-                  },
-                  icon: const Icon(Icons.play_arrow),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                IconButton(
-                  onPressed: () {
-                    controller1.pauseAnimation();
-                  },
-                  icon: const Icon(Icons.pause),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                IconButton(
-                  onPressed: () {
-                    controller1.resetAnimation();
-                  },
-                  icon: const Icon(Icons.replay),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                IconButton(
-                  onPressed: () async {
-                    List<String> availableAnimations =
-                        await controller1.getAvailableAnimations();
-
-                    print(availableAnimations);
-                    chosenAnimation1 = await showPickerDialog(
-                        'Animations', availableAnimations, chosenAnimation1);
-                    controller1.playAnimation(animationName: chosenAnimation1);
-                  },
-                  icon: const Icon(Icons.format_list_bulleted_outlined),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-              ],
-            ),
+            child: ModelOne(
+                modelOneController: controller1,
+                pickerDialog: showPickerDialog),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () {
-                  controller2.playAnimation();
-                },
-                icon: const Icon(Icons.play_arrow),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              IconButton(
-                onPressed: () {
-                  controller2.pauseAnimation();
-                },
-                icon: const Icon(Icons.pause),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              IconButton(
-                onPressed: () {
-                  controller2.resetAnimation();
-                },
-                icon: const Icon(Icons.replay),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              IconButton(
-                onPressed: () async {
-                  List<String> availableAnimations =
-                      await controller2.getAvailableAnimations();
-
-                  print(availableAnimations);
-                  chosenAnimation2 = await showPickerDialog(
-                      'Animations', availableAnimations, chosenAnimation2);
-                  controller2.playAnimation(animationName: chosenAnimation2);
-                },
-                icon: const Icon(Icons.format_list_bulleted_outlined),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-            ],
-          )
+          ModelTwo(
+              modelTwoController: controller2, pickerDialog: showPickerDialog)
         ],
       ),
       body: Container(
@@ -264,7 +156,7 @@ class _ModelRenderState extends State<ModelRender> {
                             ),
                             Text(inputList[index],
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 18)),
+                                    color: Colors.white, fontSize: 20)),
                             Icon(
                               chosenItem == inputList[index]
                                   ? Icons.check_box
